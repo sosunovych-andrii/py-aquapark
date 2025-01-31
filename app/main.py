@@ -1,4 +1,5 @@
 from abc import ABC
+from typing import Type
 
 
 class IntegerRange:
@@ -16,14 +17,14 @@ class IntegerRange:
     def __get__(self, instance: object, owner: type) -> int:
         return getattr(instance, self.protected_name)
 
-    def __set__(self, instance: object, value: int) -> int | None:
+    def __set__(self, instance: object, value: int) -> None:
         if not isinstance(value, int):
             raise TypeError(f"{value} must be an integer.")
         if not self.min_amount <= value <= self.max_amount:
             raise ValueError(f"{value} must be in range"
                              f" between {self.min_amount} and"
                              f" {self.max_amount}.")
-        return setattr(instance, self.protected_name, value)
+        setattr(instance, self.protected_name, value)
 
 
 class Visitor:
@@ -69,7 +70,7 @@ class Slide:
             self,
             name: str,
             limitation_class:
-            type[SlideLimitationValidator]
+            Type[SlideLimitationValidator]
     ) -> None:
         self.name = name
         self.limitation_class = limitation_class
